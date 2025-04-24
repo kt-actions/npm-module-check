@@ -43,5 +43,5 @@ runs:
       shell: bash
       run: |
         echo "Running script..."
-        echo "${{ inputs.bash-script }}"
-        eval "${{ inputs.bash-script }}"
+        echo "${{ inputs.run-script }}"
+        eval "${{ inputs.run-script }}"
