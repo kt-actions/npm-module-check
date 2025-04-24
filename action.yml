@@ -7,7 +7,10 @@ inputs:
   earliest:
     description: "Set this option if you want the action to select for the earliest available version that satisfies the version spec."
     default: "false"
-  bash-script:
+  install-script:
+    description: "Bash script to run after setting up Node.js."
+    required: false
+  run-script:
     description: "Bash script to run after setting up Node.js."
     required: true
 
@@ -27,6 +30,14 @@ runs:
       with:
         path: ./**/node_modules
         key: ${{ runner.os }}-npm-${{ steps.setup-node.outputs.node-version }}-${{ hashFiles('**/package-lock.json') }}
+
+    - id: install-script
+      if: ${{ inputs.install-script != '' && steps.npm-cache.outputs.cache-hit != 'true' }}
+      shell: bash
+      run: |
+        echo "Running install script..."
+        echo "${{ inputs.install-script }}"
+        eval "${{ inputs.install-script }}"
 
     - id: run-script
       shell: bash
