@@ -17,7 +17,7 @@ inputs:
 runs:
   using: composite
   steps:
-    - id: setup-node-minmax
+    - id: setup-node
       uses: kt-actions/setup-node-minmax@v1
       with:
         matrix-node-version: ${{ inputs.matrix-node-version }}
