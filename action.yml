@@ -36,12 +36,10 @@ runs:
       shell: bash
       run: |
         echo "Running install script..."
-        echo "${{ inputs.install-script }}"
         eval "${{ inputs.install-script }}"
 
     - id: run-script
       shell: bash
       run: |
         echo "Running script..."
-        echo "${{ inputs.run-script }}"
         eval "${{ inputs.run-script }}"
