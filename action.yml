@@ -12,7 +12,7 @@ inputs:
     required: false
   run-script:
     description: "Bash script to run after setting up Node.js."
-    required: true
+    required: false
 
 runs:
   using: composite
@@ -39,6 +39,7 @@ runs:
         eval "${{ inputs.install-script }}"
 
     - id: run-script
+      if: ${{ inputs.run-script != '' }}
       shell: bash
       run: |
         echo "Running script..."
