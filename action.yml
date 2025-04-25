@@ -14,9 +14,6 @@ inputs:
     default: 'npm ci'
   run-script:
     description: 'Bash script to run after setting up Node.js.'
-  cache-save-always:
-    description: 'If set to true, the cache will be saved even if the cache was not hit.'
-    default: 'false'
   cache-additional-path:
     description: 'Additional paths to cache. This is a multi-line list of paths.'
 
@@ -36,8 +33,8 @@ runs:
         cache: npm
         cache-dependency-path: ./**/package-lock.json
 
-    - id: npm-cache-restore
-      uses: actions/cache/restore@v4
+    - id: npm-cache
+      uses: actions/cache@v4
       with:
         path: |
           ./**/node_modules
@@ -45,7 +42,7 @@ runs:
         key: ${{ runner.os }}-npm-${{ steps.setup-node.outputs.node-version }}-${{ hashFiles('**/package-lock.json') }}
 
     - id: install-script
-      if: ${{ inputs.install-script != '' && steps.npm-cache-restore.outputs.cache-hit != 'true' }}
+      if: ${{ inputs.install-script != '' && steps.npm-cache.outputs.cache-hit != 'true' }}
       shell: bash
       run: |
         echo "Running install script..."
@@ -57,17 +54,3 @@ runs:
       run: |
         echo "Running script..."
         eval "${{ inputs.run-script }}"
-
-    - id: npm-cache-save
-      if: >-
-        always() && 
-        ( 
-          ${{ steps.npm-cache.outputs.cache-hit != 'true' }} ||
-          ${{ inputs.cache-save-always == 'true' }} 
-        )
-      uses: actions/cache/save@v4
-      with:
-        path: |
-          ./**/node_modules
-          ${{ inputs.cache-additional-path }}
-        key: ${{ runner.os }}-npm-${{ steps.setup-node.outputs.node-version }}-${{ hashFiles('**/package-lock.json') }}
