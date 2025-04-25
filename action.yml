@@ -1,18 +1,18 @@
-name: "Standard npm module check"
-description: "Setup Node.js environment and run checks"
-author: "GitHub"
+name: 'Prepare and run scripts in Node.js environment'
+description: 'Setup Node.js environment and run scripts. Uses caches for node and npm_modules.'
+author: 'GitHub'
 inputs:
+  node-version:
+    description: 'Concrete Node.js version to use'
   matrix-node-version:
-    description: "Version Spec array, i.e. from matrix.node-version. Latest will be selected from this array and setup-node will be run with the selected version."
+    description: 'Version Spec array, i.e. from matrix.node-version. Latest will be selected from this array and setup-node will be run with the selected version.'
   earliest:
-    description: "Set this option if you want the action to select for the earliest available version that satisfies the version spec."
-    default: "false"
+    description: 'Set this option if you want the action to select for the earliest available version that satisfies the version spec.'
+    default: 'false'
   install-script:
-    description: "Bash script to run after setting up Node.js."
-    required: false
+    description: 'Bash script to run after setting up Node.js.'
   run-script:
-    description: "Bash script to run after setting up Node.js."
-    required: false
+    description: 'Bash script to run after setting up Node.js.'
 
 runs:
   using: composite
@@ -20,6 +20,7 @@ runs:
     - id: setup-node
       uses: kt-actions/setup-node-minmax@v1
       with:
+        node-version: ${{ inputs.node-version }}
         matrix-node-version: ${{ inputs.matrix-node-version }}
         earliest: ${{ inputs.earliest }}
         cache: npm
