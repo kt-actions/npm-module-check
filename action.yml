@@ -18,6 +18,16 @@ inputs:
 runs:
   using: composite
   steps:
+    - id: echo
+      shell: bash
+      run: |
+        echo "Running setup-node with inputs:"
+        echo "node-version: ${{ inputs.node-version }}"
+        echo "matrix-node-version: ${{ inputs.matrix-node-version }}"
+        echo "matrix-node-version-earliest: ${{ inputs.matrix-node-version-earliest }}"
+        echo "install-script: ${{ inputs.install-script }}"
+        echo "run-script: ${{ inputs.run-script }}"
+
     - id: setup-node
       uses: kt-actions/setup-node-minmax@v1
       with:
