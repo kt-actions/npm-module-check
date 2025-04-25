@@ -18,9 +18,9 @@ inputs:
 runs:
   using: composite
   steps:
-    - id: echo
-      run: ${{ tojson(inputs) }}
-      shell: cat {0}
+    # - id: echo
+    #   run: ${{ tojson(inputs) }}
+    #   shell: cat {0}
 
     - id: setup-node
       uses: kt-actions/setup-node-minmax@v1
