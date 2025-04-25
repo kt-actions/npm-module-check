@@ -23,7 +23,7 @@ runs:
       with:
         node-version: ${{ inputs.node-version }}
         matrix-node-version: ${{ inputs.matrix-node-version }}
-        matrix-node-version-earliest: ${{ matrix-node-version-earliest }}
+        matrix-node-version-earliest: ${{ inputs.matrix-node-version-earliest }}
         cache: npm
         cache-dependency-path: ./**/package-lock.json
 
