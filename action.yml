@@ -36,8 +36,8 @@ runs:
         cache: npm
         cache-dependency-path: ./**/package-lock.json
 
-    - id: npm-cache
-      uses: actions/cache@v4
+    - id: npm-cache-restore
+      uses: actions/cache/restore@v4
       with:
         path: |
           ./**/node_modules
@@ -45,7 +45,7 @@ runs:
         key: ${{ runner.os }}-npm-${{ steps.setup-node.outputs.node-version }}-${{ hashFiles('**/package-lock.json') }}
 
     - id: install-script
-      if: ${{ inputs.install-script != '' && steps.npm-cache.outputs.cache-hit != 'true' }}
+      if: ${{ inputs.install-script != '' && steps.npm-cache-restore.outputs.cache-hit != 'true' }}
       shell: bash
       run: |
         echo "Running install script..."
@@ -58,7 +58,7 @@ runs:
         echo "Running script..."
         eval "${{ inputs.run-script }}"
 
-    - id: cache-save
+    - id: npm-cache-save
       if: >-
         always() && 
         ( 
