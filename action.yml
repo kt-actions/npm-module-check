@@ -14,6 +14,11 @@ inputs:
     default: 'npm ci'
   run-script:
     description: 'Bash script to run after setting up Node.js.'
+  cache-save-always:
+    description: 'If set to true, the cache will be saved even if the cache was not hit.'
+    default: 'false'
+  cache-additional-path:
+    description: 'Additional paths to cache. This is a multi-line list of paths.'
 
 runs:
   using: composite
@@ -34,8 +39,11 @@ runs:
     - id: npm-cache
       uses: actions/cache@v4
       with:
-        path: ./**/node_modules
+        path: |
+          ./**/node_modules
+          ${{ inputs.cache-additional-path }}
         key: ${{ runner.os }}-npm-${{ steps.setup-node.outputs.node-version }}-${{ hashFiles('**/package-lock.json') }}
+        save-always: ${{ inputs.cache-save-always }}
 
     - id: install-script
       if: ${{ inputs.install-script != '' && steps.npm-cache.outputs.cache-hit != 'true' }}
