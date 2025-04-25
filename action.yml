@@ -27,6 +27,15 @@ runs:
     #   run: ${{ tojson(inputs) }}
     #   shell: cat {0}
 
+    - id: setup-node
+      uses: kt-actions/setup-node-minmax@v1
+      with:
+        node-version: ${{ inputs.node-version }}
+        matrix-node-version: ${{ inputs.matrix-node-version }}
+        matrix-node-version-earliest: ${{ inputs.matrix-node-version-earliest }}
+        cache: npm
+        cache-dependency-path: ./**/package-lock.json
+
     - id: cache-key
       run: echo "cache-key=${{ runner.os }}-npm-${{ steps.setup-node.outputs.node-version }}-${{ hashFiles('**/package-lock.json') }}" >> $GITHUB_OUTPUT
       shell: bash
@@ -40,15 +49,6 @@ runs:
         gh actions-cache delete "${{ steps.cache-key.outputs.cache-key }}" --confirm
       env:
         GH_TOKEN: ${{ github.token }}
-
-    - id: setup-node
-      uses: kt-actions/setup-node-minmax@v1
-      with:
-        node-version: ${{ inputs.node-version }}
-        matrix-node-version: ${{ inputs.matrix-node-version }}
-        matrix-node-version-earliest: ${{ inputs.matrix-node-version-earliest }}
-        cache: npm
-        cache-dependency-path: ./**/package-lock.json
 
     - id: npm-cache
       uses: actions/cache@v4
