@@ -58,3 +58,17 @@ runs:
       run: |
         echo "Running script..."
         eval "${{ inputs.run-script }}"
+
+    - id: cache-save
+      if: >-
+        always() && 
+        ( 
+          ${{ steps.npm-cache.outputs.cache-hit != 'true' }} ||
+          ${{ inputs.cache-save-always == 'true' }} 
+        )
+      uses: actions/cache/save@v4
+      with:
+        path: |
+          ./**/node_modules
+          ${{ inputs.cache-additional-path }}
+        key: ${{ runner.os }}-npm-${{ steps.setup-node.outputs.node-version }}-${{ hashFiles('**/package-lock.json') }}
