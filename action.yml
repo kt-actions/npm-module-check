@@ -11,6 +11,7 @@ inputs:
     default: 'false'
   install-script:
     description: 'Bash script to run after setting up Node.js.'
+    default: 'npm ci'
   run-script:
     description: 'Bash script to run after setting up Node.js.'
 
