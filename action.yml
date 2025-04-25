@@ -39,8 +39,7 @@ runs:
     - id: npm-cache
       uses: actions/cache@v4
       with:
-        path: |
-          ./**/node_modules
+        path: ./**/node_modules
         key: ${{ runner.os }}-npm-${{ steps.setup-node.outputs.node-version }}-${{ hashFiles('**/package-lock.json') }}
         save-always: ${{ inputs.cache-save-always }}
 
