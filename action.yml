@@ -6,7 +6,7 @@ inputs:
     description: 'Concrete Node.js version to use'
   matrix-node-version:
     description: 'Version Spec array, i.e. from matrix.node-version. Latest will be selected from this array and setup-node will be run with the selected version.'
-  earliest:
+  matrix-node-version-earliest:
     description: 'Set this option if you want the action to select for the earliest available version that satisfies the version spec.'
     default: 'false'
   install-script:
@@ -23,7 +23,7 @@ runs:
       with:
         node-version: ${{ inputs.node-version }}
         matrix-node-version: ${{ inputs.matrix-node-version }}
-        earliest: ${{ inputs.earliest }}
+        matrix-node-version-earliest: ${{ matrix-node-version-earliest }}
         cache: npm
         cache-dependency-path: ./**/package-lock.json
 
