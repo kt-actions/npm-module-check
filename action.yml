@@ -16,6 +16,9 @@ inputs:
     description: 'Bash script to run after setting up Node.js.'
   cache-additional-path:
     description: 'Additional paths to cache. This is a multi-line list of paths.'
+  cache-delete:
+    description: 'Delete the cache if it exists to cache the new one.'
+    default: 'false'
 
 runs:
   using: composite
@@ -23,6 +26,20 @@ runs:
     # - id: echo
     #   run: ${{ tojson(inputs) }}
     #   shell: cat {0}
+
+    - id: cache-key
+      run: echo "cache-key=${{ runner.os }}-npm-${{ steps.setup-node.outputs.node-version }}-${{ hashFiles('**/package-lock.json') }}" >> $GITHUB_OUTPUT
+      shell: bash
+
+    - id: cache-delete
+      if: ${{ inputs.cache-delete == 'true' }}
+      continue-on-error: true
+      shell: bash
+      run: |
+        gh extension install actions/gh-actions-cache
+        gh actions-cache delete "${{ steps.cache-key.outputs.cache-key }}" --confirm
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - id: setup-node
       uses: kt-actions/setup-node-minmax@v1
@@ -39,7 +56,7 @@ runs:
         path: |
           ./**/node_modules
           ${{ inputs.cache-additional-path }}
-        key: ${{ runner.os }}-npm-${{ steps.setup-node.outputs.node-version }}-${{ hashFiles('**/package-lock.json') }}
+        key: ${{ steps.cache-key.outputs.cache-key }}
 
     - id: install-script
       if: ${{ inputs.install-script != '' && steps.npm-cache.outputs.cache-hit != 'true' }}
