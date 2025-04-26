@@ -43,6 +43,9 @@ runs:
 
     - if: ${{ inputs.cache-reset == 'true' }}
       uses: kt-actions/npm-run-script-cache-delete@v1
+      with:
+        node-version: ${{ steps.setup-node.outputs.node-version }}
+        working-directory: ${{ inputs.working-directory }}
       continue-on-error: true
 
     - id: npm-cache
