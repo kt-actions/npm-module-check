@@ -38,6 +38,7 @@ runs:
     - id: cache-key
       uses: kt-actions/npm-run-script-cache-key@v1
       with:
+        node-version: ${{ steps.setup-node.outputs.node-version }}
         working-directory: ${{ inputs.working-directory }}
 
     - if: ${{ inputs.cache-reset == 'true' }}
